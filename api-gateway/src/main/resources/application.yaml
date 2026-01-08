@@ -22,21 +22,21 @@ spring:
 
       routes:
         - id: user-service
-          uri: http://localhost:8081
+          uri: http://user-service:8081
           predicates:
             - Path=/api/users/**
 
         - id: post-service
-          uri: http://localhost:8082
+          uri: http://post-service:8082
           predicates:
             - Path=/api/v1/posts/**
 
         - id: category-service
-          uri: http://localhost:8083
+          uri: http://category-service:8083
           predicates:
             - Path=/categories/**
 
         - id: tag-service
-          uri: http://localhost:8084
+          uri: http://tag-service:8084
           predicates:
             - Path=/tags/**

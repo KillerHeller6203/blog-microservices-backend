@@ -19,13 +19,16 @@ public class CategoryClient {
 
     public void validateCategory(UUID categoryId, String token) {
 
+        if (token == null || token.isBlank()) {
+            throw new RuntimeException("Authorization token missing");
+        }
         String authHeader = token.startsWith("Bearer ")
                 ? token
                 : "Bearer " + token;
 
         try {
             webClient.get()
-                    .uri("http://localhost:8083/categories/{id}", categoryId)
+                    .uri("http://category-service:8083/categories/{id}", categoryId)
                     .header("Authorization", authHeader)
                     .retrieve()
                     .bodyToMono(Void.class)
@@ -44,7 +47,7 @@ public class CategoryClient {
      */
     public CategoryDto getById(UUID categoryId) {
         return webClient.get()
-                .uri("http://localhost:8083/categories/{id}", categoryId)
+                .uri("http://category-service:8083/categories/{id}", categoryId)
                 .retrieve()
                 .bodyToMono(CategoryDto.class)
                 .block();

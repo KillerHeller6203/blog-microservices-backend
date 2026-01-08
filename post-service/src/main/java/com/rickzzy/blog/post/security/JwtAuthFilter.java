@@ -3,6 +3,7 @@ package com.rickzzy.blog.post.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+
+    @PostConstruct
+    public void debugJwtSecret() {
+        System.out.println(">>> JWT_SECRET in post-service = " + jwtSecret);
+    }
 
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));

@@ -16,7 +16,7 @@ public class TagClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     private static final String TAG_VALIDATE_URL =
-            "http://localhost:8084/tags/validate";
+            "http://tag-service:8084/tags/validate";
 
 
     public void validateTags(Set<UUID> tagIds, String token) {

@@ -1,0 +1,105 @@
+version: "3.9"
+
+services:
+
+  postgres-user:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6203
+    volumes:
+      - user_pg_data:/var/lib/postgresql/data
+
+  postgres-category:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: category_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6203
+    volumes:
+      - category_pg_data:/var/lib/postgresql/data
+
+  postgres-tag:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: tag_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6203
+    volumes:
+      - tag_pg_data:/var/lib/postgresql/data
+
+  postgres-post:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: post_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6203
+    volumes:
+      - post_pg_data:/var/lib/postgresql/data
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/user_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 6203
+      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+    depends_on:
+      - postgres-user
+
+  category-service:
+    build: ./category-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-category:5432/category_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 6203
+      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+    depends_on:
+      - postgres-category
+
+  tag-service:
+    build: ./tag-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-tag:5432/tag_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 6203
+      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+    depends_on:
+      - postgres-tag
+
+  post-service:
+    build: ./post-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-post:5432/post_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 6203
+      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+    depends_on:
+      - postgres-post
+      - category-service
+      - tag-service
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - post-service
+      - category-service
+      - tag-service
+
+volumes:
+  user_pg_data:
+  category_pg_data:
+  tag_pg_data:
+  post_pg_data:

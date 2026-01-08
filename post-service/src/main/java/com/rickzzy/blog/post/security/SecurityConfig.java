@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -14,6 +16,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            throw new UsernameNotFoundException("JWT-only service");
+        };
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,19 +35,18 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
 
-                        // Preflight
+
+                        .requestMatchers("/error").permitAll()
+
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Swagger
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                        // 🔒 AUTH FIRST (more specific paths first!)
                         .requestMatchers("/api/v1/posts/drafts").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/posts").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/posts/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/posts/**").authenticated()
 
-                        // ✅ PUBLIC LAST
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
 
