@@ -243,4 +243,4 @@ Each service follows a layered layout: `controller → service → repository`, 
 - Batch-fetch categories and populate tags in post listings (avoid one call per post)
 - Service discovery (Eureka) and resilience (Resilience4j circuit breakers) for inter-service calls
 - Enforce authentication at the gateway and add role-based access for category/tag management
-- Integration tests with Testcontainers and a CI pipeline (GitHub Actions)
+- Integration tests with Testcontainers and a CI pipeline
