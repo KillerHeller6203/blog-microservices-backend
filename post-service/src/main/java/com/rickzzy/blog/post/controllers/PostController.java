@@ -31,15 +31,11 @@ public class PostController {
             @RequestParam(required = false) UUID tagId) {
 
         return service.getAll(categoryId, tagId);
-//                .stream().map(this::toDto).toList();
     }
 
-//    @GetMapping("/{id}")
-//    public PostDto get(@PathVariable UUID id) {
-//        return toDto(service.getById(id));
-//    }
 
-    @GetMapping("/{id}")
+//    @GetMapping("/{id}")
+    @GetMapping("/by-id/{id}")
     public PostResponseDto get(@PathVariable UUID id) {
         return service.getResponseById(id);
     }

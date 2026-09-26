@@ -6,8 +6,8 @@ services:
     image: postgres:16
     environment:
       POSTGRES_DB: user_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6203
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
       - user_pg_data:/var/lib/postgresql/data
 
@@ -15,8 +15,8 @@ services:
     image: postgres:16
     environment:
       POSTGRES_DB: category_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6203
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
       - category_pg_data:/var/lib/postgresql/data
 
@@ -24,8 +24,8 @@ services:
     image: postgres:16
     environment:
       POSTGRES_DB: tag_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6203
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
       - tag_pg_data:/var/lib/postgresql/data
 
@@ -33,8 +33,8 @@ services:
     image: postgres:16
     environment:
       POSTGRES_DB: post_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6203
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
       - post_pg_data:/var/lib/postgresql/data
 
@@ -44,9 +44,9 @@ services:
       - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/user_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 6203
-      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (at least 32 characters)}
     depends_on:
       - postgres-user
 
@@ -56,9 +56,9 @@ services:
       - "8083:8083"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-category:5432/category_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 6203
-      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (at least 32 characters)}
     depends_on:
       - postgres-category
 
@@ -68,9 +68,9 @@ services:
       - "8084:8084"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-tag:5432/tag_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 6203
-      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (at least 32 characters)}
     depends_on:
       - postgres-tag
 
@@ -80,9 +80,9 @@ services:
       - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-post:5432/post_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 6203
-      JWT_SECRET: my-super-secret-key-change-this-to-at-least-32-chars
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (at least 32 characters)}
     depends_on:
       - postgres-post
       - category-service

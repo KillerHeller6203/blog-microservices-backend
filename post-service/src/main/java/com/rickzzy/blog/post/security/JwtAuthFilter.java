@@ -3,7 +3,6 @@ package com.rickzzy.blog.post.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,11 +25,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private String jwtSecret;
 
 
-    @PostConstruct
-    public void debugJwtSecret() {
-        System.out.println(">>> JWT_SECRET in post-service = " + jwtSecret);
-    }
-
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
@@ -43,9 +37,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
-
-        System.out.println("JwtAuthFilter hit");
-        System.out.println("Authorization header = " + header);
 
         if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
